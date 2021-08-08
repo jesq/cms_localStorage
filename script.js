@@ -39,6 +39,12 @@ class UI {
 
         list.appendChild(row);
     }
+
+    static clearFields() {
+        document.querySelector('#firstName').value = '';
+        document.querySelector('#lastName').value = '';
+        document.querySelector('#emailAddress').value = '';
+    }
 }
 
 
@@ -61,6 +67,9 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     
     // Add Employee to UI
     UI.addEmployeeToList(employee);
+
+    // Clear fields
+    UI.clearFields();
 });
 
 // Event: Remove an employee
