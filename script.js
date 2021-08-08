@@ -72,12 +72,16 @@ class Store {
         localStorage.setItem('employees', JSON.stringify(employees));
     }
 
-    static removeEmployee() {
+    static removeEmployee(emailAddress) {
         const employees = Store.getEmployees();
 
         employees.forEach((employee, index) => {
-
+            if (employee.emailAddress === emailAddress) {
+                employees.splice(index, 1);
+            }
         });
+
+        localStorage.setItem('employees', JSON.stringify(employees));
     }
 }
 
@@ -116,7 +120,8 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 
 // Event: Remove an employee
 document.querySelector('#employee-list').addEventListener('click', (e) => {
-    UI.deleteEmployee(e.target)
+    UI.deleteEmployee(e.target);
+    Store.removeEmployee(e.target.parentElement.previousElementSibling.textContent);
     UI.showAlert('Employee Removed', 'success');
 });
  
