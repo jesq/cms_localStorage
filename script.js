@@ -100,5 +100,6 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 // Event: Remove an employee
 document.querySelector('#employee-list').addEventListener('click', (e) => {
     UI.deleteEmployee(e.target)
+    UI.showAlert('Employee Removed', 'success');
 });
  
