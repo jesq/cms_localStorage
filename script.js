@@ -40,6 +40,12 @@ class UI {
         list.appendChild(row);
     }
 
+    static deleteEmployee(target) {
+        if (target.classList.contains('delete')) {
+            target.parentElement.parentElement.remove();
+        }
+    }
+
     static clearFields() {
         document.querySelector('#firstName').value = '';
         document.querySelector('#lastName').value = '';
@@ -73,3 +79,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 });
 
 // Event: Remove an employee
+document.querySelector('#employee-list').addEventListener('click', (e) => {
+    UI.deleteEmployee(e.target)
+});
+ 
