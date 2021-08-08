@@ -1,6 +1,7 @@
 // Employee Class - represents an employee
 class Employee {
-    constructor(firstName, lastName, gender, birthday, emailAddress) {
+    constructor(profileImage, firstName, lastName, gender, birthday, emailAddress) {
+        this.profileImage = profileImage;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -22,7 +23,8 @@ class UI {
         const list = document.querySelector('#employee-list');
 
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${employee.firstName}</td>
+        row.innerHTML = `<td><img src="${employee.profileImage}" id="imgPreview" style="width: 100px; border-radius: 50%;"></td>
+        <td>${employee.firstName}</td>
         <td>${employee.lastName}</td>
         <td>${employee.gender}</td>
         <td>${employee.birthday}</td>
@@ -50,8 +52,11 @@ class UI {
     }
 
     static clearFields() {
+        document.querySelector('#imgPreview').src = 'img/profile_picture.png';
         document.querySelector('#firstName').value = '';
         document.querySelector('#lastName').value = '';
+        document.querySelector('#gender').value = 'Select one';
+        document.querySelector('#birthday').value = 'dd/mm/yyyy';
         document.querySelector('#emailAddress').value = '';
     }
 }
@@ -97,6 +102,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
     // get form inputs
+    const profileImage = document.querySelector('#imgPreview').src;
     const firstName = document.querySelector('#firstName').value;
     const lastName = document.querySelector('#lastName').value;
     const gender = document.querySelector('#gender').value;
@@ -104,11 +110,11 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     const emailAddress = document.querySelector('#emailAddress').value;
 
     // Input validation
-    if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === 'zz.ll.aaaa') {
+    if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === '') {
         UI.showAlert('Please fill in all fields', 'danger');
     } else {
         // Instatiate employee
-        const employee = new Employee(firstName, lastName, gender, birthday, emailAddress);
+        const employee = new Employee(profileImage, firstName, lastName, gender, birthday, emailAddress);
         
         // Add Employee to UI
         UI.addEmployeeToList(employee);
@@ -130,5 +136,16 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
     Store.removeEmployee(e.target.parentElement.previousElementSibling.textContent);
     UI.showAlert('Employee Removed', 'success');
 });
+
+// Event: Image upload
+document.querySelector('#profileImage').addEventListener("change", function () {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+        localStorage.setItem("recent-image", reader.result);
+        document.querySelector('#imgPreview').setAttribute("src", reader.result);
+    });
+    reader.readAsDataURL(this.files[0]);
+});
+
 
  

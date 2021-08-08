@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
     integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" 
     crossorigin="anonymous">
-    <title>Content Management System</title>
+    <title>
+        Content Management System
+    </title>
 </head>
 <body>
     <div class="container mt-4">
@@ -47,9 +49,18 @@
                 </select>
             </div>
             <div class="form-group mt-3">
-                <label for="birthday">Birthday:</label>
+                <label for="birthday">
+                    Birthday
+                </label>
                 <br>
                 <input class="bg-light text-white" type="date" id="birthday" name="birthday">
+            </div>
+            <div class="form-group mt-3">
+                <label for="profileImage">
+                    Profile Image
+                </label>
+                <input type="file" id="profileImage">
+                <img src="img/profile_picture.png" id="imgPreview" style="width: 150px; border-radius: 50%;" alt="Preview">
             </div>
             <div class="form-group mt-3">
                 <label for="emailAddress">
@@ -63,6 +74,7 @@
         <table class="table table-striped mt-5">
             <thead>
                 <tr>
+                    <th>Profile Image</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Gender</th>
