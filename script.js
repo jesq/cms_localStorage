@@ -1,8 +1,9 @@
 // Employee Class - represents an employee
 class Employee {
-    constructor(firstName, lastName, emailAddress) {
+    constructor(firstName, lastName, sex, emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.sex = sex;
         this.emailAddress = emailAddress;
     }
 }
@@ -22,6 +23,7 @@ class UI {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${employee.firstName}</td>
         <td>${employee.lastName}</td>
+        <td>${employee.sex}</td>
         <td>${employee.emailAddress}</td>
         <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>`;  //delete button
 
@@ -95,14 +97,15 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     // get form inputs
     const firstName = document.querySelector('#firstName').value;
     const lastName = document.querySelector('#lastName').value;
+    const sex = document.querySelector('#sex').value;
     const emailAddress = document.querySelector('#emailAddress').value;
 
     // Input validation
-    if (firstName === '' || lastName === '' || emailAddress === '') {
+    if (firstName === '' || lastName === '' || emailAddress === '' || sex === 'Select one') {
         UI.showAlert('Please fill in all fields', 'danger');
     } else {
         // Instatiate employee
-        const employee = new Employee(firstName, lastName, emailAddress);
+        const employee = new Employee(firstName, lastName, sex, emailAddress);
         
         // Add Employee to UI
         UI.addEmployeeToList(employee);
