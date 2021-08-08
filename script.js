@@ -46,6 +46,17 @@ class UI {
         }
     }
 
+    static showAlert(message, className) {
+        const div = document.createElement('div');
+        div.className = `alert alert-${className}`;
+        div.appendChild(document.createTextNode(message));
+        const container = document.querySelector('.container');
+        const form = document.querySelector('#employee-form');
+        container.insertBefore(div, form);
+
+        setTimeout(() => document.querySelector('.alert').remove(), 3000);
+    }
+
     static clearFields() {
         document.querySelector('#firstName').value = '';
         document.querySelector('#lastName').value = '';
@@ -68,14 +79,22 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     const lastName = document.querySelector('#lastName').value;
     const emailAddress = document.querySelector('#emailAddress').value;
 
-    // Instatiate employee
-    const employee = new Employee(firstName, lastName, emailAddress);
-    
-    // Add Employee to UI
-    UI.addEmployeeToList(employee);
-
-    // Clear fields
-    UI.clearFields();
+    // Input validation
+    if (firstName === '' || lastName === '' || emailAddress === '') {
+        UI.showAlert('Please fill in all fields', 'danger');
+    } else {
+        // Instatiate employee
+        const employee = new Employee(firstName, lastName, emailAddress);
+        
+        // Add Employee to UI
+        UI.addEmployeeToList(employee);
+        
+        UI.showAlert('Employee added!', 'success');
+        
+            
+        // Clear fields
+        UI.clearFields();
+    }
 });
 
 // Event: Remove an employee
