@@ -45,6 +45,7 @@ class UI {
 // Store Class - handles local storage
 
 // Event: Display employees
+document.addEventListener('DOMContentLoaded', UI.displayEmployees);
 
 // Event: Add an employee
 
