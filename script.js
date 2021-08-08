@@ -1,9 +1,10 @@
 // Employee Class - represents an employee
 class Employee {
-    constructor(firstName, lastName, sex, emailAddress) {
+    constructor(firstName, lastName, gender, birthday, emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.sex = sex;
+        this.gender = gender;
+        this.birthday = birthday;
         this.emailAddress = emailAddress;
     }
 }
@@ -23,7 +24,8 @@ class UI {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${employee.firstName}</td>
         <td>${employee.lastName}</td>
-        <td>${employee.sex}</td>
+        <td>${employee.gender}</td>
+        <td>${employee.birthday}</td>
         <td>${employee.emailAddress}</td>
         <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>`;  //delete button
 
@@ -97,15 +99,16 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     // get form inputs
     const firstName = document.querySelector('#firstName').value;
     const lastName = document.querySelector('#lastName').value;
-    const sex = document.querySelector('#sex').value;
+    const gender = document.querySelector('#gender').value;
+    const birthday = document.querySelector('#birthday').value;
     const emailAddress = document.querySelector('#emailAddress').value;
 
     // Input validation
-    if (firstName === '' || lastName === '' || emailAddress === '' || sex === 'Select one') {
+    if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === 'zz.ll.aaaa') {
         UI.showAlert('Please fill in all fields', 'danger');
     } else {
         // Instatiate employee
-        const employee = new Employee(firstName, lastName, sex, emailAddress);
+        const employee = new Employee(firstName, lastName, gender, birthday, emailAddress);
         
         // Add Employee to UI
         UI.addEmployeeToList(employee);
@@ -127,4 +130,5 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
     Store.removeEmployee(e.target.parentElement.previousElementSibling.textContent);
     UI.showAlert('Employee Removed', 'success');
 });
+
  
