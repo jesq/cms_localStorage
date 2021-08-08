@@ -10,19 +10,7 @@ class Employee {
 // UI Class - handles the displaying of the data
 class UI {
     static displayEmployees() {
-        const StoredEmployees = [
-            {
-                firstName: 'Cosmin',
-                lastName: 'Jescu',
-                emailAddress: 'jescucosmin99@gmail.com'
-            },
-            {
-                firstName: 'John',
-                lastName: 'Doe',
-                emailAddress: 'johndoe@gmail.com'
-            }
-        ];
-        const employees = StoredEmployees;
+        const employees = Store.getEmployees();
 
         employees.forEach((employee) => UI.addEmployeeToList(employee));
     }
@@ -66,6 +54,32 @@ class UI {
 
 
 // Store Class - handles local storage
+class Store {
+    static getEmployees() {
+        let employees;
+        if (localStorage.getItem('employees') === null) {
+            employees = [];
+        } else {
+            employees = JSON.parse(localStorage.getItem('employees'));
+        }
+
+        return employees;
+    }
+
+    static addEmployee(employee) {
+        const employees = Store.getEmployees();
+        employees.push(employee);
+        localStorage.setItem('employees', JSON.stringify(employees));
+    }
+
+    static removeEmployee() {
+        const employees = Store.getEmployees();
+
+        employees.forEach((employee, index) => {
+
+        });
+    }
+}
 
 // Event: Display employees
 document.addEventListener('DOMContentLoaded', UI.displayEmployees);
@@ -88,6 +102,9 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
         
         // Add Employee to UI
         UI.addEmployeeToList(employee);
+
+        // Add Employee to localStorage
+        Store.addEmployee(employee);
         
         UI.showAlert('Employee added!', 'success');
         
