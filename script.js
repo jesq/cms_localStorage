@@ -48,5 +48,19 @@ class UI {
 document.addEventListener('DOMContentLoaded', UI.displayEmployees);
 
 // Event: Add an employee
+document.querySelector('#employee-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // get form inputs
+    const firstName = document.querySelector('#firstName').value;
+    const lastName = document.querySelector('#lastName').value;
+    const emailAddress = document.querySelector('#emailAddress').value;
+
+    // Instatiate employee
+    const employee = new Employee(firstName, lastName, emailAddress);
+    
+    // Add Employee to UI
+    UI.addEmployeeToList(employee);
+});
 
 // Event: Remove an employee
