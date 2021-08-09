@@ -50,8 +50,8 @@ var employeeConverter = {
 
 // UI Class - handles the displaying of the data
 class UI {
-    static displayEmployees() {
-        const employees = Store.getEmployees();
+    static async displayEmployees() {
+        const employees = await Store.getEmployees();
 
         employees.forEach((employee) => UI.addEmployeeToList(employee));
     }
@@ -104,13 +104,19 @@ class UI {
 // Store Class - handles local storage
 class Store {
     static async getEmployees() {
-        let employees = [];
+        const employees = [];
         // if (localStorage.getItem('employees') === null) {
         //     employees = [];
         // } else {
         //     employees = JSON.parse(localStorage.getItem('employees'));
         // }
-        
+        await db.collection('employees').get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data());
+                employees.push(doc.data());
+            });
+        });
+        return employees;
     }
 
     static addEmployee(employee) {
