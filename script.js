@@ -1,3 +1,17 @@
+// Firebase config
+var firebaseConfig = {
+    apiKey: "AIzaSyA72UIwOLf7K24WOek_EDTDHCetzErQOjY",
+    authDomain: "cms-fe-training.firebaseapp.com",
+    projectId: "cms-fe-training",
+    storageBucket: "cms-fe-training.appspot.com",
+    messagingSenderId: "830598915445",
+    appId: "1:830598915445:web:f06a6a7dd2e8b7e60f1f3c",
+    measurementId: "G-G0W8R847KE"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
 // Employee Class - represents an employee
 class Employee {
     constructor(profileImage, firstName, lastName, gender, birthday, emailAddress) {
