@@ -11,10 +11,13 @@ var firebaseConfig = {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
+  
+var db = firebase.firestore();
 
 // Employee Class - represents an employee
 class Employee {
-    constructor(profileImage, firstName, lastName, gender, birthday, emailAddress) {
+    constructor(id, profileImage, firstName, lastName, gender, birthday, emailAddress) {
+        this.id = id;
         this.profileImage = profileImage;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +25,28 @@ class Employee {
         this.birthday = birthday;
         this.emailAddress = emailAddress;
     }
+    toString() {
+        return this.id + ', ' + this.firstName + ', ' + this.lastName + ', ' + this.gender + ', '
+            + this.birthday + ', ' + this.emailAddress;
+    }
 }
+
+var employeeConverter = {
+    toFirestore: function (employee) {
+        return {
+            id: employee.id,
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            gender: employee.gender,
+            birthday: employee.birthday,
+            emailAddress: employee.emailAddress
+        };
+    },
+    fromFirestore: function (snapshot, options) {
+        const data = snapshot.data(options);
+        return new Employee(data.id, data.firstName, data.lastName, data.gender, data.birthday, data.emailAddress);
+    }
+};
 
 // UI Class - handles the displaying of the data
 class UI {
@@ -37,7 +61,8 @@ class UI {
         const list = document.querySelector('#employee-list');
 
         const row = document.createElement('tr');
-        row.innerHTML = `<td><img src="${employee.profileImage}" id="imgPreview" style="width: 100px; border-radius: 50%;"></td>
+        row.innerHTML = `<td>${employee.id}</td>
+        <td><img src="${employee.profileImage}" id="imgPreview" style="width: 100px; border-radius: 50%;"></td>
         <td>${employee.firstName}</td>
         <td>${employee.lastName}</td>
         <td>${employee.gender}</td>
@@ -78,33 +103,33 @@ class UI {
 
 // Store Class - handles local storage
 class Store {
-    static getEmployees() {
-        let employees;
-        if (localStorage.getItem('employees') === null) {
-            employees = [];
-        } else {
-            employees = JSON.parse(localStorage.getItem('employees'));
-        }
-
-        return employees;
+    static async getEmployees() {
+        let employees = [];
+        // if (localStorage.getItem('employees') === null) {
+        //     employees = [];
+        // } else {
+        //     employees = JSON.parse(localStorage.getItem('employees'));
+        // }
+        
     }
 
     static addEmployee(employee) {
-        const employees = Store.getEmployees();
-        employees.push(employee);
-        localStorage.setItem('employees', JSON.stringify(employees));
+        // const employees = Store.getEmployees();
+        // employees.push(employee);
+        // localStorage.setItem('employees', JSON.stringify(employees));
+        db.collection("employees").doc(employee.id.toString()).withConverter(employeeConverter).set(employee);
     }
 
     static removeEmployee(emailAddress) {
-        const employees = Store.getEmployees();
+        // const employees = Store.getEmployees();
 
-        employees.forEach((employee, index) => {
-            if (employee.emailAddress === emailAddress) {
-                employees.splice(index, 1);
-            }
-        });
+        // employees.forEach((employee, index) => {
+        //     if (employee.emailAddress === emailAddress) {
+        //         employees.splice(index, 1);
+        //     }
+        // });
 
-        localStorage.setItem('employees', JSON.stringify(employees));
+        // localStorage.setItem('employees', JSON.stringify(employees));
     }
 }
 
@@ -116,6 +141,8 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
     // get form inputs
+    var docRef = db.collection('employees').doc();
+    const id = docRef.id;
     const profileImage = document.querySelector('#imgPreview').src;
     const firstName = document.querySelector('#firstName').value;
     const lastName = document.querySelector('#lastName').value;
@@ -128,7 +155,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
         UI.showAlert('Please fill in all fields', 'danger');
     } else {
         // Instatiate employee
-        const employee = new Employee(profileImage, firstName, lastName, gender, birthday, emailAddress);
+        const employee = new Employee(id, profileImage, firstName, lastName, gender, birthday, emailAddress);
         
         // Add Employee to UI
         UI.addEmployeeToList(employee);
@@ -148,6 +175,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 document.querySelector('#employee-list').addEventListener('click', (e) => {
     UI.deleteEmployee(e.target);
     Store.removeEmployee(e.target.parentElement.previousElementSibling.textContent);
+    console.log(e.target.parentElement.previousElementSibling.previousElementSibling.textContent);
     UI.showAlert('Employee Removed', 'success');
 });
 
