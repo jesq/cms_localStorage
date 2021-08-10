@@ -126,7 +126,7 @@ class Store {
         db.collection("employees").doc(employee.id.toString()).withConverter(employeeConverter).set(employee);
     }
 
-    static removeEmployee(emailAddress) {
+    static removeEmployee(id) {
         // const employees = Store.getEmployees();
 
         // employees.forEach((employee, index) => {
@@ -136,6 +136,7 @@ class Store {
         // });
 
         // localStorage.setItem('employees', JSON.stringify(employees));
+        db.collection('employees').doc(id).delete();
     }
 }
 
@@ -180,8 +181,9 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 // Event: Remove an employee
 document.querySelector('#employee-list').addEventListener('click', (e) => {
     UI.deleteEmployee(e.target);
-    Store.removeEmployee(e.target.parentElement.previousElementSibling.textContent);
-    console.log(e.target.parentElement.previousElementSibling.previousElementSibling.textContent);
+    Store.removeEmployee(e.target.parentElement.previousElementSibling.previousElementSibling.
+        previousElementSibling.previousElementSibling.previousElementSibling.
+        previousElementSibling.previousElementSibling.textContent);
     UI.showAlert('Employee Removed', 'success');
 });
 
