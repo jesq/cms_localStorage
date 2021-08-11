@@ -13,6 +13,7 @@ var firebaseConfig = {
   firebase.analytics();
   
 var db = firebase.firestore();
+var selectedRow = null
 
 // Employee Class - represents an employee
 class Employee {
@@ -76,9 +77,7 @@ class UI {
     }
 
     static deleteEmployee(target) {
-        if (target.classList.contains('delete')) {
-            target.parentElement.parentElement.remove();
-        }
+        target.parentElement.parentElement.remove();
     }
 
     static showAlert(message, className) {
@@ -114,7 +113,6 @@ class Store {
         // }
         await db.collection('employees').get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                console.log(doc.data());
                 employees.push(doc.data());
             });
         });
@@ -149,45 +147,65 @@ document.addEventListener('DOMContentLoaded', UI.displayEmployees);
 document.querySelector('#employee-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // get form inputs
-    var docRef = db.collection('employees').doc();
-    const id = docRef.id;
-    const profileImage = document.querySelector('#imgPreview').src;
-    const firstName = document.querySelector('#firstName').value;
-    const lastName = document.querySelector('#lastName').value;
-    const gender = document.querySelector('#gender').value;
-    const birthday = document.querySelector('#birthday').value;
-    const emailAddress = document.querySelector('#emailAddress').value;
+    if (selectedRow == null) {
+            // get form inputs
+        var docRef = db.collection('employees').doc();
+        const id = docRef.id;
+        const profileImage = document.querySelector('#imgPreview').src;
+        const firstName = document.querySelector('#firstName').value;
+        const lastName = document.querySelector('#lastName').value;
+        const gender = document.querySelector('#gender').value;
+        const birthday = document.querySelector('#birthday').value;
+        const emailAddress = document.querySelector('#emailAddress').value;
 
-    // Input validation
-    if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === '') {
-        UI.showAlert('Please fill in all fields', 'danger');
-    } else {
-        // Instatiate employee
-        const employee = new Employee(id, profileImage, firstName, lastName, gender, birthday, emailAddress);
-        
-        // Add Employee to UI
-        UI.addEmployeeToList(employee);
-
-        // Add Employee to localStorage
-        Store.addEmployee(employee);
-        
-        UI.showAlert('Employee added!', 'success');
-        
+        // Input validation
+        if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === '') {
+            UI.showAlert('Please fill in all fields', 'danger');
+        } else {
+            // Instatiate employee
+            const employee = new Employee(id, profileImage, firstName, lastName, gender, birthday, emailAddress);
             
-        // Clear fields
-        UI.clearFields();
+            // Add Employee to UI
+            UI.addEmployeeToList(employee);
+
+            // Add Employee to localStorage
+            Store.addEmployee(employee);
+            
+            UI.showAlert('Employee added!', 'success');
+            
+                
+            // Clear fields
+            UI.clearFields();
+        }
+    } else {
+        Store.updateEmployee();
+    }
+    
+});
+
+// Event: Remove or edit an employee
+document.querySelector('#employee-list').addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete')) {
+        UI.deleteEmployee(e.target);
+        Store.removeEmployee(e.target.parentElement.previousElementSibling.previousElementSibling.
+            previousElementSibling.previousElementSibling.previousElementSibling.
+            previousElementSibling.previousElementSibling.textContent);
+        UI.showAlert('Employee Removed', 'success');
+    } else if (e.target.classList.contains('edit')) {
+        selectedRow = e.target.parentElement.parentElement;
+        document.getElementById("firstName").value = selectedRow.cells[2].innerHTML;
+        document.getElementById("lastName").value = selectedRow.cells[3].innerHTML;
+        document.getElementById("gender").value = selectedRow.cells[4].innerHTML;
+        document.getElementById("birthday").value = selectedRow.cells[5].innerHTML;
+        document.getElementById("emailAddress").value = selectedRow.cells[6].innerHTML;
+        
+        db.collection('employees').doc(selectedRow.cells[0].innerHTML).get().then((doc) => {
+            document.getElementById("imgPreview").src = doc.get("profileImage");
+        });
+        
     }
 });
 
-// Event: Remove an employee
-document.querySelector('#employee-list').addEventListener('click', (e) => {
-    UI.deleteEmployee(e.target);
-    Store.removeEmployee(e.target.parentElement.previousElementSibling.previousElementSibling.
-        previousElementSibling.previousElementSibling.previousElementSibling.
-        previousElementSibling.previousElementSibling.textContent);
-    UI.showAlert('Employee Removed', 'success');
-});
 
 // Event: Image upload
 document.querySelector('#profileImage').addEventListener("change", function () {
