@@ -69,7 +69,8 @@ class UI {
         <td>${employee.gender}</td>
         <td>${employee.birthday}</td>
         <td>${employee.emailAddress}</td>
-        <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>`;  //delete button
+        <td><a href="#" class="btn btn-danger btn-sm delete">DELETE</a></td>
+        <td><a href="#" class="btn btn-primary btn-sm edit">EDIT</a></td>`
 
         list.appendChild(row);
     }
