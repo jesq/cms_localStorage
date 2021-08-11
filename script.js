@@ -81,6 +81,13 @@ class UI {
     }
 
     static updateEmployee() {
+        console.log(selectedRow.cells[1].innerHTML);
+        selectedRow.cells[1].innerHTML = `<img src="${document.getElementById("imgPreview").src}" id="imgPreview" style="width: 100px; border-radius: 50%;">`
+        selectedRow.cells[2].innerHTML = document.getElementById("firstName").value;
+        selectedRow.cells[3].innerHTML = document.getElementById("lastName").value;
+        selectedRow.cells[4].innerHTML = document.getElementById("gender").value;
+        selectedRow.cells[5].innerHTML = document.getElementById("birthday").value;
+        selectedRow.cells[6].innerHTML = document.getElementById("emailAddress").value;
         UI.clearFields();
     }
 
@@ -140,9 +147,10 @@ class Store {
             profileImage: document.querySelector('#imgPreview').src,
             emailAddress: document.querySelector('#emailAddress').value
         }, { merge: true });
-        selectedRow = null;
         document.querySelector('#submitBtn').value = "Add Employee";
         UI.showAlert('Edit successful!', 'success');
+        UI.updateEmployee();
+        selectedRow = null;
     }
 
     static removeEmployee(id) {
@@ -198,7 +206,6 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
         }
     } else {
         Store.updateEmployee();
-        UI.updateEmployee();
     }
     
 });
