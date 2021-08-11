@@ -80,6 +80,10 @@ class UI {
         target.parentElement.parentElement.remove();
     }
 
+    static updateEmployee() {
+        UI.clearFields();
+    }
+
     static showAlert(message, className) {
         const div = document.createElement('div');
         div.className = `alert alert-${className}`;
@@ -126,6 +130,21 @@ class Store {
         db.collection("employees").doc(employee.id.toString()).withConverter(employeeConverter).set(employee);
     }
 
+    static async updateEmployee() {
+        var employeeRef = db.collection('employees').doc(selectedRow.cells[0].innerHTML);
+        await employeeRef.set({
+            firstName: document.querySelector('#firstName').value,
+            lastName: document.querySelector('#lastName').value,
+            gender: document.querySelector('#gender').value,
+            birthday: document.querySelector('#birthday').value,
+            profileImage: document.querySelector('#imgPreview').src,
+            emailAddress: document.querySelector('#emailAddress').value
+        }, { merge: true });
+        selectedRow = null;
+        document.querySelector('#submitBtn').value = "Add Employee";
+        UI.showAlert('Edit successful!', 'success');
+    }
+
     static removeEmployee(id) {
         // const employees = Store.getEmployees();
 
@@ -143,7 +162,7 @@ class Store {
 // Event: Display employees
 document.addEventListener('DOMContentLoaded', UI.displayEmployees);
 
-// Event: Add an employee
+// Event: Add or EDIT an employee
 document.querySelector('#employee-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -179,6 +198,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
         }
     } else {
         Store.updateEmployee();
+        UI.updateEmployee();
     }
     
 });
@@ -201,7 +221,7 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
         db.collection('employees').doc(selectedRow.cells[0].innerHTML).get().then((doc) => {
             document.getElementById("imgPreview").src = doc.get("profileImage");
         });
-        
+        document.getElementById("submitBtn").value = "Edit Employee";
     }
 });
 
