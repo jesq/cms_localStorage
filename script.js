@@ -198,7 +198,6 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
         document.getElementById("gender").value = selectedRow.cells[4].innerHTML;
         document.getElementById("birthday").value = selectedRow.cells[5].innerHTML;
         document.getElementById("emailAddress").value = selectedRow.cells[6].innerHTML;
-        
         db.collection('employees').doc(selectedRow.cells[0].innerHTML).get().then((doc) => {
             document.getElementById("imgPreview").src = doc.get("profileImage");
         });

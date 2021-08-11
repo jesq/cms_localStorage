@@ -71,22 +71,24 @@
             <input type="submit" value="Add Employee"
             class="btn btn-primary col-12 mt-5">
         </form>
-        <table class="table table-striped mt-5">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Profile Image</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Gender</th>
-                    <th>Birthday</th>
-                    <th>Email Address</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="employee-list"></tbody>
-        </table>
+        <div class="table-responsive-sm">
+            <table class="table table-striped mt-5">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Profile Image</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Birthday</th>
+                        <th>Email Address</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="employee-list"></tbody>
+            </table>
+        </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
