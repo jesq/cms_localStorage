@@ -35,6 +35,7 @@ var employeeConverter = {
     toFirestore: function (employee) {
         return {
             id: employee.id,
+            profileImage: employee.profileImage,
             firstName: employee.firstName,
             lastName: employee.lastName,
             gender: employee.gender,
@@ -44,7 +45,7 @@ var employeeConverter = {
     },
     fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
-        return new Employee(data.id, data.firstName, data.lastName, data.gender, data.birthday, data.emailAddress);
+        return new Employee(data.id, data.profileImage, data.firstName, data.lastName, data.gender, data.birthday, data.emailAddress);
     }
 };
 
