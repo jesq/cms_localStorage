@@ -27,7 +27,8 @@ class Employee {
         this.emailAddress = emailAddress;
     }
     toString() {
-        return this.id + ', ' + this.firstName + ', ' + this.lastName + ', ' + this.gender + ', '
+        return this.id + ', ' + this.profileImage + ', ' + this.firstName + ', '
+            + this.lastName + ', ' + this.gender + ', '
             + this.birthday + ', ' + this.emailAddress;
     }
 }
