@@ -17,7 +17,7 @@ var selectedRow = null
 
 // Employee Class - represents an employee
 class Employee {
-    constructor(id, profileImage, firstName, lastName, gender, birthday, emailAddress) {
+    constructor(id, profileImage, firstName, lastName, gender, birthday, emailAddress, timeCreated) {
         this.id = id;
         this.profileImage = profileImage;
         this.firstName = firstName;
@@ -25,11 +25,12 @@ class Employee {
         this.gender = gender;
         this.birthday = birthday;
         this.emailAddress = emailAddress;
+        this.timeCreated = timeCreated;
     }
     toString() {
         return this.id + ', ' + this.profileImage + ', ' + this.firstName + ', '
             + this.lastName + ', ' + this.gender + ', '
-            + this.birthday + ', ' + this.emailAddress;
+            + this.birthday + ', ' + this.emailAddress + ', ' + this.timeCreated;
     }
 }
 
@@ -42,12 +43,14 @@ var employeeConverter = {
             lastName: employee.lastName,
             gender: employee.gender,
             birthday: employee.birthday,
-            emailAddress: employee.emailAddress
+            emailAddress: employee.emailAddress,
+            timeCreated: employee.timeCreated
         };
     },
     fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
-        return new Employee(data.id, data.profileImage, data.firstName, data.lastName, data.gender, data.birthday, data.emailAddress);
+        return new Employee(data.id, data.profileImage, data.firstName, data.lastName,
+            data.gender, data.birthday, data.emailAddress, data.timeCreated);
     }
 };
 
@@ -123,7 +126,7 @@ class Store {
         // } else {
         //     employees = JSON.parse(localStorage.getItem('employees'));
         // }
-        await db.collection('employees').get().then((querySnapshot) => {
+        await db.collection('employees').orderBy("timeCreated", "desc").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 employees.push(doc.data());
             });
@@ -185,16 +188,17 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
         const gender = document.querySelector('#gender').value;
         const birthday = document.querySelector('#birthday').value;
         const emailAddress = document.querySelector('#emailAddress').value;
+        const timeCreated = Date.now();
 
         // Input validation
         if (firstName === '' || lastName === '' || emailAddress === '' || gender === 'Select one' || birthday === '') {
             UI.showAlert('Please fill in all fields', 'danger');
         } else {
             // Instatiate employee
-            const employee = new Employee(id, profileImage, firstName, lastName, gender, birthday, emailAddress);
+            const employee = new Employee(id, profileImage, firstName, lastName, gender, birthday, emailAddress, timeCreated);
             
             // Add Employee to UI
-            UI.addEmployeeToList(employee);
+            // UI.addEmployeeToList(employee);
 
             // Add Employee to localStorage
             Store.addEmployee(employee);
@@ -233,6 +237,15 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
     }
 });
 
+
+// Event: refresh table after add / delete / edit
+
+// document.querySelector('#submitBtn').addEventListener('click', (e) => {
+//     document.getElementById('employee-list').innerHTML = '';
+//     UI.displayEmployees();
+// });
+
+   
 
 // Event: Image upload
 document.querySelector('#profileImage').addEventListener("change", function () {
