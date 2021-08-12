@@ -135,6 +135,17 @@ class Store {
         return employees;
     }
 
+    static async filterEmployeesByGender(gender) {
+        const employees = [];
+        await db.collection('employees').where("gender", "==", gender)
+            .orderBy("timeCreated", "desc").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                employees.push(doc.data());
+            });
+         });
+        employees.forEach((employee) => UI.addEmployeeToList(employee));
+    }
+
     static addEmployee(employee) {
         // const employees = Store.getEmployees();
         // employees.push(employee);
@@ -264,7 +275,9 @@ document.querySelector('#profileImage').addEventListener("change", function () {
 });
 
 document.querySelector('#genderFemaleFilter').addEventListener("click", function () {
-    console.log("female");
+    document.getElementById('employee-list').innerHTML = '';
+    Store.filterEmployeesByGender("Female");
+    
 });
 
  
