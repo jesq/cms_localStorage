@@ -263,5 +263,8 @@ document.querySelector('#profileImage').addEventListener("change", function () {
     reader.readAsDataURL(this.files[0]);
 });
 
+document.querySelector('#genderFemaleFilter').addEventListener("click", function () {
+    console.log("female");
+});
 
  
