@@ -68,7 +68,7 @@ class UI {
 
         const row = document.createElement('tr');
         row.innerHTML = `<td>${employee.id}</td>
-        <td><img src="${employee.profileImage}" id="imgPreview" style="width: 100px; border-radius: 50%;"></td>
+        <td><img class = "rounded-circle" src="${employee.profileImage}" style="width: 100px; height: 100px;"></td>
         <td>${employee.firstName}</td>
         <td>${employee.lastName}</td>
         <td>${employee.gender}</td>
@@ -86,7 +86,8 @@ class UI {
 
     static updateEmployee() {
         console.log(selectedRow.cells[1].innerHTML);
-        selectedRow.cells[1].innerHTML = `<img src="${document.getElementById("imgPreview").src}" id="imgPreview" style="width: 100px; border-radius: 50%;">`
+        selectedRow.cells[1].innerHTML = `<img class = "rounded-circle" src="${document.getElementById("imgPreview").src}" 
+        style="width: 100px; height: 100px;">`
         selectedRow.cells[2].innerHTML = document.getElementById("firstName").value;
         selectedRow.cells[3].innerHTML = document.getElementById("lastName").value;
         selectedRow.cells[4].innerHTML = document.getElementById("gender").value;
