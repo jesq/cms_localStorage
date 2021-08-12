@@ -108,7 +108,7 @@ class UI {
     }
 
     static clearFields() {
-        document.querySelector('#imgPreview').src = 'img/profile_picture.png';
+        document.querySelector('#imgPreview').src = 'img/default_image.png';
         document.querySelector('#firstName').value = '';
         document.querySelector('#lastName').value = '';
         document.querySelector('#gender').value = 'Select one';
@@ -173,7 +173,7 @@ class Store {
 }
 
 // Event: Display employees
-document.addEventListener('DOMContentLoaded', UI.displayEmployees);
+// document.addEventListener('DOMContentLoaded', UI.displayEmployees);
 
 // Event: Add or EDIT an employee
 document.querySelector('#employee-form').addEventListener('submit', (e) => {
@@ -219,7 +219,7 @@ document.querySelector('#employee-form').addEventListener('submit', (e) => {
 // Event: Remove or edit an employee
 document.querySelector('#employee-list').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete')) {
-        UI.deleteEmployee(e.target);
+        // UI.deleteEmployee(e.target);
         Store.removeEmployee(e.target.parentElement.previousElementSibling.previousElementSibling.
             previousElementSibling.previousElementSibling.previousElementSibling.
             previousElementSibling.previousElementSibling.textContent);
@@ -240,6 +240,11 @@ document.querySelector('#employee-list').addEventListener('click', (e) => {
 
 
 // Event: refresh table after add / delete / edit
+
+db.collection('employees').onSnapshot((snapshot) => {
+    document.getElementById('employee-list').innerHTML = '';
+    UI.displayEmployees();
+});
 
 // document.querySelector('#submitBtn').addEventListener('click', (e) => {
 //     document.getElementById('employee-list').innerHTML = '';
